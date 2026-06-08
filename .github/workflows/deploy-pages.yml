@@ -1,4 +1,4 @@
-name: Deploy static Antro to GitHub Pages
+name: Deploy Antro to GitHub Pages
 
 on:
   push:
@@ -27,17 +27,67 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare static files
+      - name: Setup .NET if full project exists
+        if: ${{ hashFiles('Antro.sln') != '' }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Prepare site files
+        shell: bash
         run: |
-          touch .nojekyll
-          cp index.html 404.html
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' index.html
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' 404.html
+          set -e
+
+          rm -rf site-output
+          mkdir -p site-output
+
+          if [ -f "Antro.sln" ]; then
+            echo "Detected full Antro project. Building Blazor WebAssembly..."
+            dotnet restore Antro.sln
+            dotnet publish src/Antro.Web/Antro.Web.csproj -c Release -o publish-antro
+            cp -a publish-antro/wwwroot/. site-output/
+
+          elif [ -f "index.html" ]; then
+            echo "Detected static site in repository root."
+            find . -mindepth 1 -maxdepth 1 \
+              ! -name ".git" \
+              ! -name ".github" \
+              ! -name "site-output" \
+              -exec cp -a {} site-output/ \;
+
+          elif [ -f "wwwroot/index.html" ]; then
+            echo "Detected static site inside wwwroot."
+            cp -a wwwroot/. site-output/
+
+          else
+            echo "ERROR: Could not find Antro.sln, index.html, or wwwroot/index.html."
+            echo "Repository root:"
+            ls -la
+            exit 1
+          fi
+
+          touch site-output/.nojekyll
+
+          if [ -f "site-output/index.html" ]; then
+            cp site-output/index.html site-output/404.html
+            sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' site-output/index.html
+            sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' site-output/404.html
+          else
+            echo "ERROR: site-output/index.html was not created."
+            ls -la site-output
+            exit 1
+          fi
+
+          echo "Prepared files:"
+          ls -la site-output
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site-output
 
       - name: Deploy to GitHub Pages
         id: deployment
