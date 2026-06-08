@@ -34,6 +34,10 @@ jobs:
       - name: Publish Blazor WebAssembly
         run: dotnet publish src/Antro.Web/Antro.Web.csproj -c Release -o publish-antro
 
+      - name: Fix base href for GitHub Pages project site
+        run: |
+          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' publish-antro/wwwroot/index.html
+
       - name: Prepare GitHub Pages files
         run: |
           touch publish-antro/wwwroot/.nojekyll
