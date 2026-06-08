@@ -29,10 +29,8 @@ jobs:
 
       - name: Show repository root
         run: |
-          echo "Workspace: $GITHUB_WORKSPACE"
           pwd
-          ls -la "$GITHUB_WORKSPACE"
-          find "$GITHUB_WORKSPACE" -maxdepth 2 -type f | sort
+          ls -la
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -40,18 +38,18 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore "$GITHUB_WORKSPACE/Antro.sln"
+        run: dotnet restore Antro.sln
 
       - name: Publish Blazor WebAssembly
-        run: dotnet publish "$GITHUB_WORKSPACE/src/Antro.Web/Antro.Web.csproj" -c Release -o "$GITHUB_WORKSPACE/publish-antro"
+        run: dotnet publish src/Antro.Web/Antro.Web.csproj -c Release -o publish-antro
 
       - name: Prepare GitHub Pages output
         run: |
-          touch "$GITHUB_WORKSPACE/publish-antro/wwwroot/.nojekyll"
-          cp "$GITHUB_WORKSPACE/publish-antro/wwwroot/index.html" "$GITHUB_WORKSPACE/publish-antro/wwwroot/404.html"
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' "$GITHUB_WORKSPACE/publish-antro/wwwroot/index.html"
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' "$GITHUB_WORKSPACE/publish-antro/wwwroot/404.html"
-          ls -la "$GITHUB_WORKSPACE/publish-antro/wwwroot"
+          touch publish-antro/wwwroot/.nojekyll
+          cp publish-antro/wwwroot/index.html publish-antro/wwwroot/404.html
+          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' publish-antro/wwwroot/index.html
+          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' publish-antro/wwwroot/404.html
+          ls -la publish-antro/wwwroot
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
