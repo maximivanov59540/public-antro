@@ -27,13 +27,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show repository root
-        run: |
-          echo "Workspace: $GITHUB_WORKSPACE"
-          pwd
-          ls -la "$GITHUB_WORKSPACE"
-          ls -la "$GITHUB_WORKSPACE/Antro"
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -49,8 +42,6 @@ jobs:
         run: |
           touch "$GITHUB_WORKSPACE/publish-antro/wwwroot/.nojekyll"
           cp "$GITHUB_WORKSPACE/publish-antro/wwwroot/index.html" "$GITHUB_WORKSPACE/publish-antro/wwwroot/404.html"
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' "$GITHUB_WORKSPACE/publish-antro/wwwroot/index.html"
-          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' "$GITHUB_WORKSPACE/publish-antro/wwwroot/404.html"
           ls -la "$GITHUB_WORKSPACE/publish-antro/wwwroot"
 
       - name: Configure GitHub Pages
