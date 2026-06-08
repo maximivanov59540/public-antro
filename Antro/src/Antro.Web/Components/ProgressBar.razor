@@ -1,0 +1,26 @@
+@{
+    var clampedTotal = TotalSteps <= 0 ? 1 : TotalSteps;
+    var clampedCurrent = CurrentStep < 0 ? 0 : Math.Min(CurrentStep, clampedTotal);
+    var widthStyle = $"width: {(clampedCurrent * 100m / clampedTotal).ToString(System.Globalization.CultureInfo.InvariantCulture)}%;";
+}
+
+<div class="progress-bar-block">
+    <div class="progress-bar-block__meta">
+        <span>@Label</span>
+        <span>@clampedCurrent / @clampedTotal</span>
+    </div>
+    <div class="progress-bar-block__track">
+        <span class="progress-bar-block__fill" style="@widthStyle"></span>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int CurrentStep { get; set; }
+
+    [Parameter]
+    public int TotalSteps { get; set; }
+
+    [Parameter]
+    public string Label { get; set; } = "Прогресс";
+}

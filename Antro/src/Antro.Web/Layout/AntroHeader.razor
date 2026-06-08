@@ -1,0 +1,23 @@
+<header class="antro-header">
+    <a class="antro-header__logo" href="/">
+        <span class="antro-header__logo-dot">•</span>antro
+    </a>
+
+    <nav class="antro-header__nav">
+        <NavLink class="antro-header__nav-link" href="/" Match="NavLinkMatch.All">Главная</NavLink>
+        <NavLink class="antro-header__nav-link" href="/stage/newborn" Match="NavLinkMatch.Prefix">Этапы</NavLink>
+        <NavLink class="antro-header__nav-link" href="/dashboard" Match="NavLinkMatch.Prefix">Дашборд</NavLink>
+        <span class="antro-header__nav-link antro-header__nav-link--disabled">Подсказки</span>
+    </nav>
+
+    <div class="antro-header__actions">
+        <a class="antro-header__change-stage" href="/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Изменить этап
+        </a>
+        <a class="antro-header__profile" href="/questionnaire">М</a>
+    </div>
+</header>

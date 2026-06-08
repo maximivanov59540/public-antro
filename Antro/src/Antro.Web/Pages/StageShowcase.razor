@@ -1,0 +1,100 @@
+@page "/stage/{StageSlug}"
+@inject IStageShowcaseBuilder StageShowcaseBuilder
+@inject IAntroClock Clock
+
+@if (CurrentStage is null || ViewModel is null)
+{
+    <PageTitle>Этап не найден</PageTitle>
+
+    <section class="surface-card not-found">
+        <p class="home-eyebrow">Stage</p>
+        <h1>Этап не найден</h1>
+        <p>Проверьте адрес или выберите один из шести этапов ниже.</p>
+    </section>
+
+    <StageSelector Heading="Выберите этап семьи" />
+}
+else
+{
+    <PageTitle>@CurrentStage.Title</PageTitle>
+
+    <Breadcrumbs Items="@BreadcrumbItems" />
+
+    <section class="surface-card showcase-header">
+        <div class="showcase-header__copy">
+            <p class="showcase-header__eyebrow">ЭТАП · @CurrentStage.RangeLabel</p>
+            <h1 class="showcase-header__title">
+                @CurrentStage.Title —
+                <span class="showcase-header__title-highlight">@TotalBenefitsCount выплат и льгот</span>,
+                которые можно оформить сейчас
+            </h1>
+            <p class="showcase-header__subtitle">@ViewModel.Subtitle</p>
+        </div>
+
+        <div class="showcase-header__summary">
+            <p class="showcase-header__summary-eyebrow">ИТОГО НА ЭТОМ ЭТАПЕ</p>
+            <p class="showcase-total-amount">@ViewModel.HeaderInfo.TotalAmountText</p>
+            <p class="showcase-header__summary-note">Складывается из разовых выплат, ежемесячных пособий и материнского капитала.</p>
+
+            <div class="showcase-summary-divider"></div>
+
+            <div class="showcase-summary-table">
+                @foreach (var row in ViewModel.HeaderInfo.AmountsByCategory)
+                {
+                    <div class="showcase-summary-row">
+                        <span class="showcase-summary-row__label">@row.Label</span>
+                        <span class="showcase-summary-row__amount">@row.AmountText</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <AllBenefitsList Sections="@ViewModel.Sections" />
+
+    <section class="surface-card showcase-cta">
+        <div class="showcase-cta__copy">
+            <h2>Хотите увидеть точнее — расскажите о себе</h2>
+            <p>Заполните короткую анкету: укажем суммы под вашу семью, регион и доход, и подскажем, что оформить в первую очередь.</p>
+        </div>
+        <a class="antro-btn antro-btn--primary" href="/questionnaire">Создать профиль →</a>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public string StageSlug { get; set; } = string.Empty;
+
+    private StageRouteItem? CurrentStage { get; set; }
+    private StageShowcaseViewModel? ViewModel { get; set; }
+
+    private int TotalBenefitsCount =>
+        (ViewModel?.HeaderInfo.UrgentCount ?? 0) + (ViewModel?.HeaderInfo.RightsCount ?? 0);
+
+    private IReadOnlyList<Breadcrumbs.BreadcrumbItem> BreadcrumbItems =>
+        CurrentStage is null
+            ? Array.Empty<Breadcrumbs.BreadcrumbItem>()
+            :
+            [
+                new("Главная", "/"),
+                new("Этапы", "/stage/newborn"),
+                new(CurrentStage.Title)
+            ];
+
+    protected override void OnParametersSet()
+    {
+        if (!StageNavigation.TryGetBySlug(StageSlug, out var item))
+        {
+            CurrentStage = null;
+            ViewModel = null;
+            return;
+        }
+
+        CurrentStage = item;
+        ViewModel = StageShowcaseBuilder.Build(
+            item!.Stage,
+            Moscow2026BenefitCatalog.Published,
+            WebEvaluationContext.CreateMoscow2026(Clock.Today),
+            profile: new UserProfile());
+    }
+}

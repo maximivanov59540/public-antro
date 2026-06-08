@@ -1,0 +1,32 @@
+<nav class="breadcrumbs">
+    @for (var i = 0; i < Items.Count; i++)
+    {
+        var item = Items[i];
+        var isLast = i == Items.Count - 1;
+
+        if (!isLast && item.Href is not null)
+        {
+            <a class="breadcrumbs__link" href="@item.Href">@item.Text</a>
+        }
+        else if (!isLast)
+        {
+            <span class="breadcrumbs__item">@item.Text</span>
+        }
+        else
+        {
+            <span class="breadcrumbs__item breadcrumbs__item--current">@item.Text</span>
+        }
+
+        @if (!isLast)
+        {
+            <span class="breadcrumbs__separator">›</span>
+        }
+    }
+</nav>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<BreadcrumbItem> Items { get; set; } = Array.Empty<BreadcrumbItem>();
+
+    public sealed record BreadcrumbItem(string Text, string? Href = null);
+}

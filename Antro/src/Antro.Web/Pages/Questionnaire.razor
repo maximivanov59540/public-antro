@@ -1,0 +1,370 @@
+@page "/questionnaire"
+@layout QuestionnaireLayout
+@using QuestionnaireFlowStep = Antro.Application.QuestionnaireStep
+@using System.Globalization
+@inject IQuestionnaireFlow QuestionnaireFlow
+@inject InMemoryUserProfileState UserProfileState
+@inject NavigationManager NavigationManager
+
+<PageTitle>Анкета</PageTitle>
+
+@if (_showDone)
+{
+    <div class="q-progress">
+        <div class="q-progress-fill" style="width: 100%"></div>
+    </div>
+
+    <div class="questionnaire-shell">
+        <div class="q-screen q-done">
+            <div class="q-done-illu" aria-hidden="true">
+                <svg viewBox="0 0 140 140">
+                    <defs>
+                        <radialGradient id="q-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#FFE3C0" />
+                            <stop offset="100%" stop-color="#FBE9DE" />
+                        </radialGradient>
+                    </defs>
+                    <g stroke="#C4674A" stroke-width="3" stroke-linecap="round" opacity=".55">
+                        <line x1="70" y1="8"   x2="70" y2="20" />
+                        <line x1="70" y1="120" x2="70" y2="132" />
+                        <line x1="8"  y1="70"  x2="20" y2="70" />
+                        <line x1="120" y1="70" x2="132" y2="70" />
+                        <line x1="22" y1="22"  x2="32" y2="32" />
+                        <line x1="108" y1="108" x2="118" y2="118" />
+                        <line x1="118" y1="22" x2="108" y2="32" />
+                        <line x1="32" y1="108" x2="22" y2="118" />
+                    </g>
+                    <circle cx="70" cy="70" r="40" fill="url(#q-glow)" stroke="#C4674A" stroke-width="2.5" />
+                    <path d="M54 72l11 11 22-26" fill="none" stroke="#A8553B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1 class="q-done-title">Готово! Ваш профиль создан</h1>
+            <p class="q-done-sub">Мы подобрали льготы специально для вас</p>
+            <div class="q-done-preview">
+                <div class="q-done-row">
+                    <span class="k">Найдено выплат</span>
+                    <span class="v">12</span>
+                </div>
+                <div class="q-done-row">
+                    <span class="k">Из них с дедлайном</span>
+                    <span class="v">4</span>
+                </div>
+                <div class="q-done-row">
+                    <span class="k">Ближайший дедлайн</span>
+                    <span class="v">через 46 дней</span>
+                </div>
+            </div>
+            <a class="q-done-cta" href="/dashboard">
+                Смотреть мои льготы
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="m13 6 6 6-6 6" />
+                </svg>
+            </a>
+        </div>
+    </div>
+}
+else if (CurrentStep is null)
+{
+    <div class="questionnaire-shell">
+        <p>Не удалось загрузить анкету. <a class="antro-link" href="/">Вернуться на главную</a></p>
+    </div>
+}
+else
+{
+    <div class="q-progress">
+        <div class="q-progress-fill" style="width: @ProgressPct.ToString("F1", CultureInfo.InvariantCulture)%"></div>
+    </div>
+
+    <header class="questionnaire-topbar">
+        <div class="questionnaire-topbar__left">
+            <button class="icon-btn" type="button" disabled="@(CurrentStepIndex == 0)" @onclick="GoBack" aria-label="Назад">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5" />
+                    <path d="m12 19-7-7 7-7" />
+                </svg>
+            </button>
+            <a class="questionnaire-mark" href="/">
+                <span class="questionnaire-mark__dot"></span>
+                <span>antro</span>
+            </a>
+        </div>
+        <span class="step-counter">Шаг @(CurrentStepIndex + 1) из @VisibleSteps.Count</span>
+    </header>
+
+    <div class="questionnaire-shell questionnaire-shell--wide">
+        <div class="q-screen" @key="CurrentStepIndex">
+            <div class="q-hero">
+                <div class="q-hero__main">
+                    <span class="q-eyebrow">@SectionLabel(CurrentStep.Id)</span>
+                    <h1 class="q-title">@CurrentStep.Title</h1>
+                    <p class="q-sub">@((MarkupString)CurrentStep.Prompt)</p>
+
+                    @if (CurrentStep.Kind == QuestionKind.DateInput)
+                    {
+                        <DateQuestion
+                            Options="@CurrentStep.Options"
+                            Value="@Draft.ChildDate"
+                            ValueChanged="OnChildDateChanged"
+                            SelectedInputKind="@Draft.DateInputKind"
+                            SelectedInputKindChanged="OnDateInputKindChanged"
+                            OnContinue="GoNextOrComplete" />
+                    }
+                    else if (CurrentStep.Kind == QuestionKind.SingleSelect)
+                    {
+                        <ChoiceQuestion
+                            Options="@CurrentStep.Options"
+                            Layout="@CurrentStep.Layout"
+                            SelectedValue="@GetSelectedValue(CurrentStep.Id)"
+                            SelectedValueChanged="@(value => OnChoiceSelected(CurrentStep.Id, value))" />
+                    }
+                </div>
+
+                <QuestionnaireCompanion Items="BuildCompanionItems()" />
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private UserProfileDraft Draft { get; set; } = new();
+    private int CurrentStepIndex { get; set; }
+    private bool _showDone;
+
+    private IReadOnlyList<QuestionnaireFlowStep> VisibleSteps => QuestionnaireFlow.GetVisibleSteps(Draft);
+
+    private QuestionnaireFlowStep? CurrentStep => VisibleSteps.Count == 0
+        ? null
+        : VisibleSteps[Math.Min(CurrentStepIndex, VisibleSteps.Count - 1)];
+
+    private bool IsLastStep => CurrentStep is not null && CurrentStepIndex == VisibleSteps.Count - 1;
+
+    private bool CanProceed => CurrentStep is not null && HasAnswer(CurrentStep.Id);
+
+    private double ProgressPct => VisibleSteps.Count == 0
+        ? 0
+        : (CurrentStepIndex + 0.5) / VisibleSteps.Count * 100;
+
+    private void GoBack()
+    {
+        if (CurrentStepIndex > 0)
+            CurrentStepIndex--;
+    }
+
+    private Task GoNextOrComplete()
+    {
+        if (!CanProceed || CurrentStep is null)
+            return Task.CompletedTask;
+
+        if (IsLastStep)
+        {
+            var profile = QuestionnaireFlow.BuildProfile(Draft);
+            UserProfileState.Set(profile);
+            _showDone = true;
+            return Task.CompletedTask;
+        }
+
+        CurrentStepIndex++;
+        ClampCurrentStepIndex();
+        return Task.CompletedTask;
+    }
+
+    private Task OnChildDateChanged(DateOnly? value)
+    {
+        Draft = Draft with { ChildDate = value };
+        return Task.CompletedTask;
+    }
+
+    private Task OnDateInputKindChanged(DateInputKind value)
+    {
+        Draft = Draft with { DateInputKind = value };
+        return Task.CompletedTask;
+    }
+
+    private async Task OnChoiceSelected(QuestionnaireStepId stepId, string? value)
+    {
+        Draft = stepId switch
+        {
+            QuestionnaireStepId.ChildOrder => Draft with
+            {
+                ChildOrder = TryParseEnum<ChildOrder>(value),
+                MatCapitalHistory = TryParseEnum<ChildOrder>(value) == ChildOrder.Second ? Draft.MatCapitalHistory : null
+            },
+            QuestionnaireStepId.MatCapitalHistory => Draft with { MatCapitalHistory = TryParseEnum<MatCapitalHistory>(value) },
+            QuestionnaireStepId.FamilyStatus => Draft with { FamilyStatus = TryParseEnum<FamilyStatus>(value) },
+            QuestionnaireStepId.EmploymentStatus => Draft with { EmploymentStatus = TryParseEnum<EmploymentStatus>(value) },
+            QuestionnaireStepId.ParentAgeBand => Draft with { ParentAgeBand = TryParseEnum<ParentAgeBand>(value) },
+            QuestionnaireStepId.IncomeBand => Draft with { IncomeBand = TryParseEnum<IncomeBand>(value) },
+            QuestionnaireStepId.PropertyStatus => Draft with { PropertyStatus = TryParseEnum<PropertyStatus>(value) },
+            QuestionnaireStepId.MortgageIntent => Draft with { MortgageIntent = TryParseEnum<MortgageIntent>(value) },
+            _ => Draft
+        };
+
+        ClampCurrentStepIndex();
+        await Task.Delay(380);
+        await GoNextOrComplete();
+        StateHasChanged();
+    }
+
+    private string? GetSelectedValue(QuestionnaireStepId stepId) =>
+        stepId switch
+        {
+            QuestionnaireStepId.ChildOrder => Draft.ChildOrder?.ToString(),
+            QuestionnaireStepId.MatCapitalHistory => Draft.MatCapitalHistory?.ToString(),
+            QuestionnaireStepId.FamilyStatus => Draft.FamilyStatus?.ToString(),
+            QuestionnaireStepId.EmploymentStatus => Draft.EmploymentStatus?.ToString(),
+            QuestionnaireStepId.ParentAgeBand => Draft.ParentAgeBand?.ToString(),
+            QuestionnaireStepId.IncomeBand => Draft.IncomeBand?.ToString(),
+            QuestionnaireStepId.PropertyStatus => Draft.PropertyStatus?.ToString(),
+            QuestionnaireStepId.MortgageIntent => Draft.MortgageIntent?.ToString(),
+            _ => null
+        };
+
+    private bool HasAnswer(QuestionnaireStepId stepId) =>
+        stepId switch
+        {
+            QuestionnaireStepId.ChildDate => Draft.ChildDate is not null && Draft.DateInputKind != DateInputKind.Unknown,
+            QuestionnaireStepId.ChildOrder => Draft.ChildOrder is not null,
+            QuestionnaireStepId.MatCapitalHistory => Draft.MatCapitalHistory is not null,
+            QuestionnaireStepId.FamilyStatus => Draft.FamilyStatus is not null,
+            QuestionnaireStepId.EmploymentStatus => Draft.EmploymentStatus is not null,
+            QuestionnaireStepId.ParentAgeBand => Draft.ParentAgeBand is not null,
+            QuestionnaireStepId.IncomeBand => Draft.IncomeBand is not null,
+            QuestionnaireStepId.PropertyStatus => Draft.PropertyStatus is not null,
+            QuestionnaireStepId.MortgageIntent => Draft.MortgageIntent is not null,
+            _ => false
+        };
+
+    private void ClampCurrentStepIndex()
+    {
+        if (VisibleSteps.Count == 0)
+        {
+            CurrentStepIndex = 0;
+            return;
+        }
+
+        CurrentStepIndex = Math.Min(CurrentStepIndex, VisibleSteps.Count - 1);
+    }
+
+    private static TEnum? TryParseEnum<TEnum>(string? value)
+        where TEnum : struct, Enum =>
+        Enum.TryParse<TEnum>(value, out var parsed) ? parsed : null;
+
+    // ---- Companion panel ---------------------------------------------------
+
+    private IReadOnlyList<QuestionnaireCompanion.Item> BuildCompanionItems()
+    {
+        var steps = VisibleSteps;
+        var items = new List<QuestionnaireCompanion.Item>(steps.Count);
+
+        for (var i = 0; i < steps.Count; i++)
+        {
+            var step = steps[i];
+            var answer = CompanionAnswer(step.Id);
+            var status = answer is not null
+                ? QuestionnaireCompanion.CompanionStatus.Done
+                : i == CurrentStepIndex
+                    ? QuestionnaireCompanion.CompanionStatus.Current
+                    : QuestionnaireCompanion.CompanionStatus.Todo;
+
+            items.Add(new QuestionnaireCompanion.Item(CompanionLabel(step.Id), answer, status));
+        }
+
+        return items;
+    }
+
+    private static string SectionLabel(QuestionnaireStepId id) => id switch
+    {
+        QuestionnaireStepId.ChildDate or
+        QuestionnaireStepId.ChildOrder or
+        QuestionnaireStepId.MatCapitalHistory => "О малыше",
+        QuestionnaireStepId.FamilyStatus or
+        QuestionnaireStepId.EmploymentStatus => "О семье",
+        QuestionnaireStepId.ParentAgeBand or
+        QuestionnaireStepId.IncomeBand or
+        QuestionnaireStepId.PropertyStatus => "Доходы и льготы",
+        QuestionnaireStepId.MortgageIntent => "Жильё",
+        _ => "Анкета"
+    };
+
+    private static string CompanionLabel(QuestionnaireStepId id) => id switch
+    {
+        QuestionnaireStepId.ChildDate => "Малыш",
+        QuestionnaireStepId.ChildOrder => "Какой ребёнок",
+        QuestionnaireStepId.MatCapitalHistory => "Маткапитал ранее",
+        QuestionnaireStepId.FamilyStatus => "Семья",
+        QuestionnaireStepId.EmploymentStatus => "Работа",
+        QuestionnaireStepId.ParentAgeBand => "Возраст родителей",
+        QuestionnaireStepId.IncomeBand => "Доход",
+        QuestionnaireStepId.PropertyStatus => "Имущество",
+        QuestionnaireStepId.MortgageIntent => "Жильё",
+        _ => id.ToString()
+    };
+
+    private string? CompanionAnswer(QuestionnaireStepId id) => id switch
+    {
+        QuestionnaireStepId.ChildDate =>
+            Draft.ChildDate is { } date && Draft.DateInputKind != DateInputKind.Unknown
+                ? Draft.DateInputKind == DateInputKind.DueDate
+                    ? $"ПДР {date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)}"
+                    : date.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture)
+                : null,
+        QuestionnaireStepId.ChildOrder => Draft.ChildOrder switch
+        {
+            ChildOrder.First => "Первый",
+            ChildOrder.Second => "Второй",
+            _ => null
+        },
+        QuestionnaireStepId.MatCapitalHistory => Draft.MatCapitalHistory switch
+        {
+            Antro.Domain.MatCapitalHistory.NeverReceived => "Не получали",
+            Antro.Domain.MatCapitalHistory.ReceivedUnused => "Получали на 1-го",
+            _ => null
+        },
+        QuestionnaireStepId.FamilyStatus => Draft.FamilyStatus switch
+        {
+            Antro.Domain.FamilyStatus.Married => "В браке",
+            Antro.Domain.FamilyStatus.Partners => "Оба родителя",
+            Antro.Domain.FamilyStatus.SingleParent => "Один родитель",
+            _ => null
+        },
+        QuestionnaireStepId.EmploymentStatus => Draft.EmploymentStatus switch
+        {
+            Antro.Domain.EmploymentStatus.MotherOnly => "Мама",
+            Antro.Domain.EmploymentStatus.FatherOnly => "Папа",
+            Antro.Domain.EmploymentStatus.Both => "Оба",
+            Antro.Domain.EmploymentStatus.NeitherParent => "Никто",
+            _ => null
+        },
+        QuestionnaireStepId.ParentAgeBand => Draft.ParentAgeBand switch
+        {
+            Antro.Domain.ParentAgeBand.BothUnderThirtySix => "Оба до 36",
+            Antro.Domain.ParentAgeBand.AtLeastOneThirtySixOrOlder => "36 или старше",
+            Antro.Domain.ParentAgeBand.Mixed => "По-разному",
+            _ => null
+        },
+        QuestionnaireStepId.IncomeBand => Draft.IncomeBand switch
+        {
+            Antro.Domain.IncomeBand.UpToOneLivingMinimum => "до 25 342 ₽",
+            Antro.Domain.IncomeBand.UpToOneAndHalfLivingMinimum => "до 38 013 ₽",
+            Antro.Domain.IncomeBand.UpToTwoLivingMinimums => "до 50 684 ₽",
+            Antro.Domain.IncomeBand.AboveTwoLivingMinimums => "выше 50 684 ₽",
+            Antro.Domain.IncomeBand.Unknown => "Уточним вместе",
+            _ => null
+        },
+        QuestionnaireStepId.PropertyStatus => Draft.PropertyStatus switch
+        {
+            Antro.Domain.PropertyStatus.DoesNotOwnHome => "Обычный набор",
+            Antro.Domain.PropertyStatus.OwnsHome => "Есть крупное",
+            Antro.Domain.PropertyStatus.Unsure => "Не уверены",
+            _ => null
+        },
+        QuestionnaireStepId.MortgageIntent => Draft.MortgageIntent switch
+        {
+            Antro.Domain.MortgageIntent.PlansToUseMortgage => "Планируем",
+            Antro.Domain.MortgageIntent.None => "Не планируем",
+            _ => null
+        },
+        _ => null
+    };
+}

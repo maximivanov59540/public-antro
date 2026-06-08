@@ -1,0 +1,16 @@
+@if (Model is not null)
+{
+    <div class="amount-display amount-display--@Model.KindKey">
+        <p class="amount-display__value">@Model.Text</p>
+
+        @if (!string.IsNullOrWhiteSpace(Model.DetailsText))
+        {
+            <p class="amount-display__details">@Model.DetailsText</p>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public AmountDisplayViewModel? Model { get; set; }
+}

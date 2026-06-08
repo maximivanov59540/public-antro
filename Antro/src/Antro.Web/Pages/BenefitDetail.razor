@@ -1,0 +1,138 @@
+@page "/benefits/{Slug}"
+@inject IBenefitDetailBuilder BenefitDetailBuilder
+@inject IAntroClock Clock
+@inject InMemoryUserProfileState UserProfileState
+
+@if (Benefit is null || Model is null)
+{
+    <PageTitle>Мера не найдена</PageTitle>
+
+    <section class="surface-card not-found">
+        <p class="home-eyebrow">Мера поддержки</p>
+        <h1>Льгота не найдена</h1>
+        <p>Проверьте адрес карточки или вернитесь к обзору мер.</p>
+        <a class="antro-link" href="@BackHref">Назад</a>
+    </section>
+}
+else
+{
+    <PageTitle>@Model.Title</PageTitle>
+
+    <div class="benefit-detail-shell">
+        <a class="detail-back-link" href="@BackHref">Назад: @BackLabel</a>
+
+        <section class="surface-card benefit-detail-hero">
+            <div class="benefit-detail-hero__grid @(HasFacts ? null : "benefit-detail-hero__grid--single")">
+                <div class="benefit-detail-hero__copy">
+                    <div class="benefit-detail-hero__topline">
+                        <StatusPill Model="Model.Availability" />
+                    </div>
+                    <h1>@Model.Title</h1>
+                    <p class="benefit-detail-hero__subtitle">@Model.Subtitle</p>
+                    <p class="benefit-detail-hero__context">@ContextNote</p>
+
+                    @if (Model.ActionSteps.Count > 0)
+                    {
+                        <a class="detail-hero__cta" href="@CtaHref">
+                            Что нужно сделать
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14" /><path d="m13 6 6 6-6 6" />
+                            </svg>
+                        </a>
+                    }
+                </div>
+
+                @if (Model.Amount is not null || Model.Deadline.KindKey != "none")
+                {
+                    <div class="benefit-detail-hero__facts">
+                        @if (Model.Amount is not null)
+                        {
+                            <div class="benefit-detail-fact">
+                                <p class="benefit-detail-fact__label">Сумма</p>
+                                <AmountDisplay Model="Model.Amount" />
+                            </div>
+                        }
+
+                        @if (Model.Amount is not null && Model.Deadline.KindKey != "none")
+                        {
+                            <hr class="benefit-detail-hero__divider" />
+                        }
+
+                        @if (Model.Deadline.KindKey != "none")
+                        {
+                            <div class="benefit-detail-fact">
+                                <p class="benefit-detail-fact__label">Срок</p>
+                                <div class="benefit-detail-fact__deadline">
+                                    <DeadlineBadge Model="Model.Deadline" />
+                                    <p>@Model.Deadline.Explanation</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+
+        <section class="detail-block surface-card">
+            <div class="detail-block__header">
+                <h3>Что это такое</h3>
+            </div>
+            <p class="detail-lead">@Model.WhatIsIt</p>
+        </section>
+
+        <ActionStepsBlock Steps="Model.ActionSteps" />
+        <ConditionsBlock Conditions="Model.Conditions" />
+        <DocumentsBlock Documents="Model.Documents" />
+        <LegalSourcesBlock Sources="Model.LegalSources" />
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+
+    private Benefit? Benefit { get; set; }
+
+    private BenefitDetailViewModel? Model { get; set; }
+
+    private bool HasProfile => UserProfileState.CurrentProfile is not null;
+
+    private bool HasFacts => Model is not null
+        && (Model.Amount is not null || Model.Deadline.KindKey != "none");
+
+    private bool IsDemoScenario => string.Equals(
+        UserProfileState.CurrentDashboardRoute,
+        "/demo/maria",
+        StringComparison.OrdinalIgnoreCase);
+
+    private string BackHref => HasProfile ? UserProfileState.CurrentDashboardRoute : "/questionnaire";
+
+    private string CtaHref => HasProfile ? "#action-steps" : "/questionnaire";
+
+    private string BackLabel => HasProfile
+        ? IsDemoScenario ? "К демо Марии" : "К обзору мер"
+        : "К анкете";
+
+    private string ContextNote => HasProfile
+        ? IsDemoScenario
+            ? "Оценка построена по демонстрационному профилю Марии и тому же московскому каталогу MVP, что и в обычном потоке."
+            : "Оценка построена по текущему профилю из анкеты и московскому каталогу MVP."
+        : "Показываем базовую оценку без сохранённого профиля. После анкеты часть условий и сумм может уточниться.";
+
+    protected override void OnParametersSet()
+    {
+        Benefit = Moscow2026BenefitCatalog.Published.FirstOrDefault(candidate =>
+            string.Equals(candidate.Slug, Slug, StringComparison.OrdinalIgnoreCase));
+
+        if (Benefit is null)
+        {
+            Model = null;
+            return;
+        }
+
+        Model = BenefitDetailBuilder.Build(
+            Benefit,
+            UserProfileState.CurrentProfile ?? new UserProfile(),
+            WebEvaluationContext.CreateMoscow2026(Clock.Today));
+    }
+}

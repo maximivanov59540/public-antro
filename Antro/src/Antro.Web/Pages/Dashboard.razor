@@ -1,0 +1,40 @@
+@page "/dashboard"
+@inject IDashboardBuilder DashboardBuilder
+@inject IAntroClock Clock
+@inject InMemoryUserProfileState UserProfileState
+
+@if (DashboardModel is null)
+{
+    <PageTitle>Ваш обзор мер поддержки</PageTitle>
+
+    <section class="surface-card not-found">
+        <p class="home-eyebrow">Личный обзор</p>
+        <h1>Профиль пока не собран</h1>
+        <p>Чтобы собрать персональный дашборд, сначала заполните анкету. Профиль в MVP живёт только в памяти вкладки и не восстанавливается после перезагрузки страницы.</p>
+        <div class="dashboard-empty__actions">
+            <a class="antro-link" href="/questionnaire">Пройти анкету</a>
+            <a class="stage-selector-card dashboard-empty__link" href="/demo/maria">Открыть демо Марии</a>
+            <a class="stage-selector-card dashboard-empty__link" href="/">Вернуться к витрине этапов</a>
+        </div>
+    </section>
+}
+else
+{
+    <DashboardView Model="DashboardModel" />
+}
+
+@code {
+    private DashboardViewModel? DashboardModel { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        UserProfileState.SetDashboardRoute(InMemoryUserProfileState.DefaultDashboardRoute);
+
+        DashboardModel = UserProfileState.CurrentProfile is null
+            ? null
+            : DashboardBuilder.Build(
+                Moscow2026BenefitCatalog.Published,
+                UserProfileState.CurrentProfile,
+                WebEvaluationContext.CreateMoscow2026(Clock.Today));
+    }
+}

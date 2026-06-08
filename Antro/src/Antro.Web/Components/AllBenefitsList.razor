@@ -1,0 +1,25 @@
+@if (Sections.Count > 0)
+{
+    @foreach (var section in Sections)
+    {
+        <BenefitSectionHeader Title="@section.SectionHeaderText"
+                              SubtitleText="@section.SectionSubtitleText"
+                              SectionColorClass="@section.SectionColorClass" />
+
+        <div class="benefit-section @section.SectionColorClass">
+            @foreach (var card in section.Cards)
+            {
+                <BenefitCard Model="@card" />
+            }
+        </div>
+    }
+}
+else
+{
+    <p class="preview-block__empty">Подходящие карточки пока не найдены.</p>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<BenefitSectionViewModel> Sections { get; set; } = Array.Empty<BenefitSectionViewModel>();
+}

@@ -1,0 +1,41 @@
+@if (Model is not null)
+{
+    <div class="deadline-badge deadline-badge--@Model.SemanticKey" title="@Model.Explanation">
+        @if (Model.SemanticKey is not "none" and not "unknown")
+        {
+            <svg class="deadline-badge__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        }
+        <span class="deadline-badge__label">@DisplayText</span>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public DeadlineBadgeViewModel? Model { get; set; }
+
+    private string DisplayText
+    {
+        get
+        {
+            if (Model is null) return string.Empty;
+
+            // For Active deadlines, compute readable duration from DaysLeft
+            if (Model.SemanticKey == "active" && Model.DaysLeft is { } days && days > 0)
+            {
+                if (days <= 14) return $"{days} дн.";
+                var months = (int)Math.Ceiling(days / 30.4);
+                return months switch
+                {
+                    1 => "1 месяц",
+                    2 or 3 or 4 => $"{months} месяца",
+                    _ => $"{months} месяцев"
+                };
+            }
+
+            return Model.Text;
+        }
+    }
+}

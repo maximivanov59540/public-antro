@@ -1,0 +1,69 @@
+@* Persistent "profile builder" panel shown beside every questionnaire step. *@
+@* Driven entirely by Items, so it stays in sync with the visible flow. *@
+@using System.Globalization
+
+<aside class="q-companion q-companion--profile" aria-hidden="true">
+    <div class="q-companion__head">
+        <span class="q-companion__eyebrow">Ваш профиль</span>
+        <div class="q-companion__amount">@AmountText</div>
+        <p class="q-companion__note">Заполнено @AnsweredCount из @Items.Count</p>
+        <div class="q-companion__bar">
+            <span style="width: @Pct.ToString("F0", CultureInfo.InvariantCulture)%"></span>
+        </div>
+    </div>
+
+    <ul class="q-companion__steps">
+        @foreach (var item in Items)
+        {
+            <li class="q-cstep q-cstep--@StatusClass(item.Status)">
+                <span class="q-cstep__mark">
+                    @if (item.Status == CompanionStatus.Done)
+                    {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                    }
+                </span>
+                <span class="q-cstep__text">
+                    <span class="q-cstep__label">@item.Label</span>
+                    @if (!string.IsNullOrEmpty(item.Answer))
+                    {
+                        <span class="q-cstep__val">@item.Answer</span>
+                    }
+                    else if (item.Status == CompanionStatus.Current)
+                    {
+                        <span class="q-cstep__val q-cstep__val--now">сейчас</span>
+                    }
+                </span>
+            </li>
+        }
+    </ul>
+
+    <p class="q-companion__trust">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        Данные нужны только для расчёта — не передаём третьим лицам
+    </p>
+</aside>
+
+@code {
+    public enum CompanionStatus { Done, Current, Todo }
+
+    public sealed record Item(string Label, string? Answer, CompanionStatus Status);
+
+    [Parameter] public IReadOnlyList<Item> Items { get; set; } = Array.Empty<Item>();
+    [Parameter] public string AmountText { get; set; } = "до ≈ 1 200 000 ₽";
+
+    private int AnsweredCount => Items.Count(i => i.Status == CompanionStatus.Done);
+
+    private double Pct => Items.Count == 0 ? 0 : (double)AnsweredCount / Items.Count * 100;
+
+    private static string StatusClass(CompanionStatus status) => status switch
+    {
+        CompanionStatus.Done => "done",
+        CompanionStatus.Current => "current",
+        _ => "todo"
+    };
+}

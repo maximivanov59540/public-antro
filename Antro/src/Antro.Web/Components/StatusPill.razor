@@ -1,0 +1,9 @@
+@if (Model is not null)
+{
+    <span class="status-pill status-pill--@Model.SemanticKey">@Model.Text</span>
+}
+
+@code {
+    [Parameter]
+    public StatusPillViewModel? Model { get; set; }
+}

@@ -1,0 +1,121 @@
+@if (Model is not null)
+{
+    <PageTitle>@Model.Title</PageTitle>
+
+    @* A — centered hero header on the clean background (no card), like the landing *@
+    <section class="dash-header">
+        <div class="dash-header__copy">
+            <h1 class="dash-header__title">
+                <span class="dash-header__accent">@TitleFirstWord</span>@(" " + TitleRest)
+            </h1>
+
+            <div class="dash-header__meta">
+                <span class="dash-chip dash-chip--stage" title="@Model.Stage.Description">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                    </svg>
+                    @Model.Stage.Eyebrow: <b>@Model.Stage.Label</b>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(ScenarioNote))
+    {
+        <section class="surface-card dashboard-demo-note">
+            <p>@ScenarioNote</p>
+        </section>
+    }
+
+    @* B — unified KPI strip *@
+    <DashboardSummary Model="Model.Summary" />
+
+    @* C + D — dense urgency section up top; overdue is moved to the page bottom *@
+    @if (UrgentSection is not null)
+    {
+        <BenefitSectionHeader Title="Сейчас важно — успейте оформить"
+                              SubtitleText="Меры с дедлайном после рождения: оформите вовремя"
+                              SectionColorClass="benefit-section--urgent" />
+        <div class="benefit-section benefit-section--urgent">
+            @foreach (var card in UrgentSection.Cards)
+            {
+                <BenefitCard Model="@card" />
+            }
+        </div>
+    }
+
+    <AllBenefitsList Sections="OtherSections" />
+
+    @* Overdue is shown last on purpose — informational, not the first thing a parent meets *@
+    @if (OverdueItems.Count > 0)
+    {
+        <div class="overdue-alert">
+            <p class="overdue-alert__label">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 9v4" /><path d="M12 17h.01" />
+                    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                </svg>
+                Сроки, которые уже прошли
+            </p>
+            @foreach (var card in OverdueItems)
+            {
+                <a class="overdue-alert__row" href="@card.Href">
+                    <span class="overdue-alert__title">@card.Title</span>
+                    <span class="overdue-alert__count">@OverdueText(card.Deadline)</span>
+                </a>
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public DashboardViewModel? Model { get; set; }
+
+    [Parameter]
+    public string HeaderEyebrow { get; set; } = "Личный обзор";
+
+    [Parameter]
+    public string HeaderSubtitle { get; set; } = "Показываем персональный расчёт по текущему профилю, а не статическую витрину.";
+
+    [Parameter]
+    public string? ScenarioNote { get; set; }
+
+    // First word of the title gets the terracotta accent (e.g. "Ваш"), like the landing.
+    private string TitleFirstWord => (Model?.Title ?? string.Empty).Split(' ', 2)[0];
+
+    private string TitleRest
+    {
+        get
+        {
+            var parts = (Model?.Title ?? string.Empty).Split(' ', 2);
+            return parts.Length > 1 ? parts[1] : string.Empty;
+        }
+    }
+
+    // The "urgent" section is pulled up into its own prominent block, so it is
+    // rendered once here and filtered out of the general list below.
+    private BenefitSectionViewModel? UrgentSection =>
+        Model?.AllBenefitSections.FirstOrDefault(section => section.SectionKey == "urgent");
+
+    private IReadOnlyList<BenefitSectionViewModel> OtherSections => Model is null
+        ? Array.Empty<BenefitSectionViewModel>()
+        : Model.AllBenefitSections.Where(section => section.SectionKey != "urgent").ToArray();
+
+    // Overdue items aren't part of the urgent section (they're past their deadline),
+    // so we surface them from the full catalogue by their "expired" deadline marker.
+    private IReadOnlyList<BenefitCardViewModel> OverdueItems => Model is null
+        ? Array.Empty<BenefitCardViewModel>()
+        : Model.AllBenefitSections
+            .SelectMany(section => section.Cards)
+            .Where(card => card.Deadline.SemanticKey == "expired")
+            .DistinctBy(card => card.BenefitId)
+            .Take(3)
+            .ToArray();
+
+    private static string OverdueText(DeadlineBadgeViewModel deadline) =>
+        deadline.DeadlineDate is { } date
+            ? $"срок прошёл {date:dd.MM.yyyy}"
+            : "срок прошёл";
+}

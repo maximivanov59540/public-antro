@@ -1,0 +1,32 @@
+@if (Model is not null)
+{
+    <a class="benefit-row benefit-row--@Model.SectionCategoryKey" href="@Model.Href">
+        <BenefitCardIcon IconKey="@Model.IconKey" />
+
+        <span class="benefit-row__title">@Model.Title</span>
+
+        @if (ShowDeadline)
+        {
+            <span class="benefit-row__deadline">
+                <DeadlineBadge Model="Model.Deadline" />
+            </span>
+        }
+
+        <svg class="benefit-row__chevron" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 6 15 12 9 18" />
+        </svg>
+    </a>
+}
+
+@code {
+    [Parameter]
+    public BenefitCardViewModel? Model { get; set; }
+
+    // Show the deadline chip only when there is a real, ticking deadline —
+    // hide the repetitive "без срока / не определён" noise.
+    private bool ShowDeadline =>
+        Model?.Deadline is { } d &&
+        (d.SemanticKey is "urgent" or "soon" or "expired"
+         || (d.SemanticKey == "active" && d.DaysLeft is > 0));
+}

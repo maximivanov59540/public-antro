@@ -1,0 +1,206 @@
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="date-row">
+    <label class="date-field">
+        <span class="date-label">День</span>
+        <input @ref="_dayInput"
+               class="date-input"
+               type="number"
+               inputmode="numeric"
+               min="1" max="31"
+               placeholder="ДД"
+               value="@_dayStr"
+               @oninput="OnDayInput"
+               @onkeydown="OnKeyDown" />
+    </label>
+    <label class="date-field">
+        <span class="date-label">Месяц</span>
+        <input @ref="_monthInput"
+               class="date-input"
+               type="number"
+               inputmode="numeric"
+               min="1" max="12"
+               placeholder="ММ"
+               value="@_monthStr"
+               @oninput="OnMonthInput"
+               @onkeydown="OnKeyDown" />
+    </label>
+    <label class="date-field">
+        <span class="date-label">Год</span>
+        <input @ref="_yearInput"
+               class="date-input"
+               type="number"
+               inputmode="numeric"
+               min="2020" max="2030"
+               placeholder="ГГГГ"
+               value="@_yearStr"
+               @oninput="OnYearInput"
+               @onkeydown="OnKeyDown" />
+    </label>
+</div>
+
+@if (AgeHint is { } hint)
+{
+    <p class="date-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" />
+        </svg>
+        @hint
+    </p>
+}
+
+<button type="button"
+        class="pdr-toggle @(_isPdr ? "pdr-toggle--on" : null)"
+        @onclick="TogglePdr">
+    <span class="pdr-toggle__sw"></span>
+    <span class="pdr-toggle__label">
+        @(_isPdr ? "Это предполагаемая дата родов (ПДР)" : "Ещё не родился? Укажите ПДР")
+    </span>
+</button>
+
+<button type="button"
+        class="q-continue"
+        disabled="@(!IsValid)"
+        @onclick="OnContinueClicked">
+    Продолжить
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/>
+        <path d="m13 6 6 6-6 6"/>
+    </svg>
+</button>
+
+@code {
+    [Parameter] public IReadOnlyList<QuestionOption> Options { get; set; } = Array.Empty<QuestionOption>();
+    [Parameter] public DateOnly? Value { get; set; }
+    [Parameter] public EventCallback<DateOnly?> ValueChanged { get; set; }
+    [Parameter] public DateInputKind SelectedInputKind { get; set; } = DateInputKind.Unknown;
+    [Parameter] public EventCallback<DateInputKind> SelectedInputKindChanged { get; set; }
+    [Parameter] public EventCallback OnContinue { get; set; }
+
+    private string _dayStr = "";
+    private string _monthStr = "";
+    private string _yearStr = "";
+    private bool _isPdr;
+
+    private ElementReference _dayInput;
+    private ElementReference _monthInput;
+    private ElementReference _yearInput;
+
+    protected override void OnInitialized()
+    {
+        if (Value is { } date)
+        {
+            _dayStr = date.Day.ToString();
+            _monthStr = date.Month.ToString();
+            _yearStr = date.Year.ToString();
+        }
+
+        _isPdr = SelectedInputKind == DateInputKind.DueDate;
+
+        if (SelectedInputKind == DateInputKind.Unknown)
+            _ = SelectedInputKindChanged.InvokeAsync(DateInputKind.BirthDate);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Land the cursor in "День" so typing starts immediately.
+        if (firstRender && _dayStr.Length == 0)
+            await _dayInput.FocusAsync();
+    }
+
+    private int? Day => int.TryParse(_dayStr, out var n) && n >= 1 && n <= 31 ? n : null;
+    private int? Month => int.TryParse(_monthStr, out var n) && n >= 1 && n <= 12 ? n : null;
+    private int? Year => int.TryParse(_yearStr, out var n) && n >= 2020 && n <= 2030 ? n : null;
+
+    private bool IsValid => Day is not null && Month is not null && Year is not null;
+
+    private async Task OnDayInput(ChangeEventArgs e)
+    {
+        _dayStr = Clamp(e.Value?.ToString(), 2);
+        // Two digits, or a leading digit that can't grow into a valid day (4-9) → next.
+        if (_dayStr.Length >= 2 || (_dayStr.Length == 1 && _dayStr[0] >= '4'))
+            await _monthInput.FocusAsync();
+    }
+
+    private async Task OnMonthInput(ChangeEventArgs e)
+    {
+        _monthStr = Clamp(e.Value?.ToString(), 2);
+        // Month maxes at 12, so a leading 2-9 is already complete.
+        if (_monthStr.Length >= 2 || (_monthStr.Length == 1 && _monthStr[0] >= '2'))
+            await _yearInput.FocusAsync();
+    }
+
+    private void OnYearInput(ChangeEventArgs e)
+    {
+        _yearStr = Clamp(e.Value?.ToString(), 4);
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await OnContinueClicked();
+    }
+
+    private static string Clamp(string? raw, int maxLen)
+    {
+        var digits = new string((raw ?? "").Where(char.IsDigit).ToArray());
+        return digits.Length > maxLen ? digits[..maxLen] : digits;
+    }
+
+    private async Task TogglePdr()
+    {
+        _isPdr = !_isPdr;
+        await SelectedInputKindChanged.InvokeAsync(_isPdr ? DateInputKind.DueDate : DateInputKind.BirthDate);
+    }
+
+    private async Task OnContinueClicked()
+    {
+        if (!IsValid) return;
+        await ValueChanged.InvokeAsync(new DateOnly(Year!.Value, Month!.Value, Day!.Value));
+        await OnContinue.InvokeAsync();
+    }
+
+    // Friendly confirmation of what we understood — ties the answer to the life stages.
+    private string? AgeHint
+    {
+        get
+        {
+            if (!IsValid)
+                return null;
+
+            var date = new DateOnly(Year!.Value, Month!.Value, Day!.Value);
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            if (_isPdr || date > today)
+                return "Ждём ребёнка · этап «Беременность»";
+
+            var months = ((today.Year - date.Year) * 12) + today.Month - date.Month
+                - (today.Day < date.Day ? 1 : 0);
+            if (months < 0)
+                months = 0;
+
+            var stage = months switch
+            {
+                < 2  => "Только родился",
+                < 6  => "До полугода",
+                < 18 => "До полутора лет",
+                < 36 => "До трёх",
+                _    => "Старше трёх"
+            };
+
+            return $"Малышу {FormatAge(months)} · этап «{stage}»";
+        }
+    }
+
+    private static string FormatAge(int months)
+    {
+        if (months < 1)
+            return "меньше месяца";
+        if (months < 12)
+            return $"≈ {months} мес";
+
+        var years = months / 12;
+        var rem = months % 12;
+        return rem == 0 ? $"≈ {years} г" : $"≈ {years} г {rem} мес";
+    }
+}

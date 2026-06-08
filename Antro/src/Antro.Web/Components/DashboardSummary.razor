@@ -1,0 +1,32 @@
+@if (Model is not null)
+{
+    <section class="dash-kpi">
+        <div class="dash-kpi__grid">
+            @foreach (var bucket in Model.Buckets)
+            {
+                <article class="dash-kpi__card dash-kpi__card--@bucket.SemanticKey @(bucket.IsMuted ? "is-muted" : null)">
+                    <p class="dash-kpi__label">@bucket.Title</p>
+                    <p class="dash-kpi__value">@bucket.ValueText</p>
+                    <p class="dash-kpi__sub">@bucket.Description</p>
+                </article>
+            }
+
+            <article class="dash-kpi__card dash-kpi__card--available">
+                <p class="dash-kpi__label">Доступно сейчас</p>
+                <p class="dash-kpi__value">@Model.AvailableNowCount</p>
+                <p class="dash-kpi__sub">из @Model.TotalBenefitsCount мер по профилю</p>
+            </article>
+
+            <article class="dash-kpi__card dash-kpi__card--urgent">
+                <p class="dash-kpi__label">Срочные сроки</p>
+                <p class="dash-kpi__value">@Model.UrgentCount</p>
+                <p class="dash-kpi__sub">меры с дедлайном</p>
+            </article>
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public DashboardSummaryViewModel? Model { get; set; }
+}

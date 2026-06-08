@@ -1,0 +1,32 @@
+@if (Documents.Count > 0)
+{
+    <section class="detail-block surface-card">
+        <div class="detail-block__header">
+            <h3>Документы</h3>
+        </div>
+
+        <div class="detail-block__stack detail-block__stack--cols detail-block__stack--even">
+            @foreach (var document in Documents)
+            {
+                <article class="detail-row">
+                    <div class="detail-row__copy">
+                        <h4>@document.Title</h4>
+                        @if (!string.IsNullOrWhiteSpace(document.Description))
+                        {
+                            <p>@document.Description</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(document.Notes))
+                        {
+                            <p class="detail-row__note">@document.Notes</p>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<DocumentRequirementViewModel> Documents { get; set; } = Array.Empty<DocumentRequirementViewModel>();
+}

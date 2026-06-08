@@ -1,0 +1,32 @@
+@if (Conditions.Count > 0)
+{
+    <section class="detail-block surface-card">
+        <div class="detail-block__header">
+            <h3>Условия</h3>
+        </div>
+
+        <div class="detail-block__stack detail-block__stack--cols">
+            @foreach (var condition in Conditions)
+            {
+                <article class="detail-row">
+                    <div class="detail-row__copy">
+                        <h4>@condition.Text</h4>
+                        @if (!string.IsNullOrWhiteSpace(condition.Explanation))
+                        {
+                            <p>@condition.Explanation</p>
+                        }
+                    </div>
+
+                    <div class="detail-row__meta">
+                        <StatusPill Model="condition.Status" />
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<ConditionViewModel> Conditions { get; set; } = Array.Empty<ConditionViewModel>();
+}

@@ -1,0 +1,129 @@
+"filename", "language", "ASP.NET Razor", "JSON", "XML", "C#", "JavaScript", "PostCSS", "HTML", "comment", "blank", "total"
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\AmountEvaluator.cs", "C#", 0, 0, 0, 243, 0, 0, 0, 0, 38, 281
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\Antro.Application.csproj", "XML", 0, 0, 10, 0, 0, 0, 0, 0, 4, 14
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\ApplicationDisplayText.cs", "C#", 0, 0, 0, 161, 0, 0, 0, 0, 18, 179
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\ApplicationPlaceholder.cs", "C#", 0, 0, 0, 5, 0, 0, 0, 0, 2, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\BenefitDetailBuilder.cs", "C#", 0, 0, 0, 57, 0, 0, 0, 0, 7, 64
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\BenefitEvaluator.cs", "C#", 0, 0, 0, 284, 0, 0, 0, 0, 43, 327
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\BenefitPrioritySorter.cs", "C#", 0, 0, 0, 105, 0, 0, 0, 2, 19, 126
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\BenefitSectionGrouper.cs", "C#", 0, 0, 0, 20, 0, 0, 0, 0, 4, 24
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\BenefitViewModelMapper.cs", "C#", 0, 0, 0, 97, 0, 0, 0, 0, 13, 110
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\DashboardBuilder.cs", "C#", 0, 0, 0, 239, 0, 0, 0, 0, 41, 280
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\DeadlineEvaluator.cs", "C#", 0, 0, 0, 159, 0, 0, 0, 4, 19, 182
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\DemoProfiles.cs", "C#", 0, 0, 0, 19, 0, 0, 0, 3, 3, 25
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IAmountEvaluator.cs", "C#", 0, 0, 0, 6, 0, 0, 0, 0, 3, 9
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IAntroClock.cs", "C#", 0, 0, 0, 9, 0, 0, 0, 2, 3, 14
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IBenefitDetailBuilder.cs", "C#", 0, 0, 0, 9, 0, 0, 0, 0, 3, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IBenefitEvaluator.cs", "C#", 0, 0, 0, 9, 0, 0, 0, 0, 3, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IBenefitPrioritySorter.cs", "C#", 0, 0, 0, 6, 0, 0, 0, 0, 3, 9
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IDashboardBuilder.cs", "C#", 0, 0, 0, 9, 0, 0, 0, 0, 3, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IDeadlineEvaluator.cs", "C#", 0, 0, 0, 6, 0, 0, 0, 0, 3, 9
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IQuestionnaireFlow.cs", "C#", 0, 0, 0, 8, 0, 0, 0, 0, 5, 13
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\IStageShowcaseBuilder.cs", "C#", 0, 0, 0, 10, 0, 0, 0, 0, 3, 13
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\MoneyDisplayFormatter.cs", "C#", 0, 0, 0, 59, 0, 0, 0, 0, 14, 73
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\QuestionnaireFlow.cs", "C#", 0, 0, 0, 178, 0, 0, 0, 0, 20, 198
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\StageShowcaseBuilder.cs", "C#", 0, 0, 0, 122, 0, 0, 0, 2, 23, 147
+"c:\Users\Максим\Documents\Antro\src\Antro.Application\ViewModels.cs", "C#", 0, 0, 0, 127, 0, 0, 0, 0, 21, 148
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Antro.Content.Moscow2026.csproj", "XML", 0, 0, 10, 0, 0, 0, 0, 0, 4, 14
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitCatalog.BirthAndChildcare.cs", "C#", 0, 0, 0, 330, 0, 0, 0, 0, 14, 344
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitCatalog.Pregnancy.cs", "C#", 0, 0, 0, 133, 0, 0, 0, 0, 9, 142
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitCatalog.ServicesHousingTax.cs", "C#", 0, 0, 0, 231, 0, 0, 0, 0, 14, 245
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitCatalog.cs", "C#", 0, 0, 0, 67, 0, 0, 0, 0, 14, 81
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitFactory.cs", "C#", 0, 0, 0, 37, 0, 0, 0, 0, 3, 40
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026BenefitIds.cs", "C#", 0, 0, 0, 70, 0, 0, 0, 0, 4, 74
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026Catalog.cs", "C#", 0, 0, 0, 9, 0, 0, 0, 0, 6, 15
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026CatalogPlaceholder.cs", "C#", 0, 0, 0, 5, 0, 0, 0, 0, 2, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026DraftContent.cs", "C#", 0, 0, 0, 47, 0, 0, 0, 0, 9, 56
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026EligibilityRules.cs", "C#", 0, 0, 0, 116, 0, 0, 0, 0, 20, 136
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026LegalSources.cs", "C#", 0, 0, 0, 82, 0, 0, 0, 0, 9, 91
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026PriorityHints.cs", "C#", 0, 0, 0, 10, 0, 0, 0, 0, 7, 17
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026StageAvailability.cs", "C#", 0, 0, 0, 100, 0, 0, 0, 0, 20, 120
+"c:\Users\Максим\Documents\Antro\src\Antro.Content.Moscow2026\Moscow2026Thresholds.cs", "C#", 0, 0, 0, 34, 0, 0, 0, 0, 11, 45
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\AmountRules.cs", "C#", 0, 0, 0, 120, 0, 0, 0, 0, 36, 156
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\Antro.Domain.csproj", "XML", 0, 0, 7, 0, 0, 0, 0, 0, 3, 10
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\BenefitCatalog.cs", "C#", 0, 0, 0, 182, 0, 0, 0, 0, 46, 228
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\BenefitClassification.cs", "C#", 0, 0, 0, 28, 0, 0, 0, 0, 4, 32
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\ChildLifeStageCalculator.cs", "C#", 0, 0, 0, 48, 0, 0, 0, 0, 10, 58
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\ConcreteEligibilityRules.cs", "C#", 0, 0, 0, 447, 0, 0, 0, 0, 124, 571
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\DeadlineRules.cs", "C#", 0, 0, 0, 62, 0, 0, 0, 0, 19, 81
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\DomainGuard.cs", "C#", 0, 0, 0, 12, 0, 0, 0, 0, 3, 15
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\DomainPlaceholder.cs", "C#", 0, 0, 0, 2, 0, 0, 0, 0, 2, 4
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\EligibilityRules.cs", "C#", 0, 0, 0, 45, 0, 0, 0, 0, 11, 56
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\EvaluationContext.cs", "C#", 0, 0, 0, 10, 0, 0, 0, 0, 3, 13
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\EvaluationResults.cs", "C#", 0, 0, 0, 203, 0, 0, 0, 0, 54, 257
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\Identifiers.cs", "C#", 0, 0, 0, 28, 0, 0, 0, 0, 10, 38
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\LegalSource.cs", "C#", 0, 0, 0, 43, 0, 0, 0, 0, 11, 54
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\LifeStage.cs", "C#", 0, 0, 0, 10, 0, 0, 0, 0, 2, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\Money.cs", "C#", 0, 0, 0, 35, 0, 0, 0, 0, 12, 47
+"c:\Users\Максим\Documents\Antro\src\Antro.Domain\UserProfile.cs", "C#", 0, 0, 0, 79, 0, 0, 0, 0, 20, 99
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Antro.Web.csproj", "XML", 0, 0, 16, 0, 0, 0, 0, 0, 5, 21
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\App.razor", "ASP.NET Razor", 6, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\ActionStepsBlock.razor", "ASP.NET Razor", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\AllBenefitsList.razor", "ASP.NET Razor", 23, 0, 0, 0, 0, 0, 0, 0, 3, 26
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\AmountDisplay.razor", "ASP.NET Razor", 14, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\BenefitCard.razor", "ASP.NET Razor", 37, 0, 0, 0, 0, 0, 0, 0, 7, 44
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\BenefitCardIcon.razor", "ASP.NET Razor", 65, 0, 0, 0, 0, 0, 0, 0, 9, 74
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\BenefitSectionHeader.razor", "ASP.NET Razor", 15, 0, 0, 0, 0, 0, 0, 0, 4, 19
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\Breadcrumbs.razor", "ASP.NET Razor", 28, 0, 0, 0, 0, 0, 0, 0, 5, 33
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\ChoiceQuestion.razor", "ASP.NET Razor", 37, 0, 0, 0, 0, 0, 0, 0, 5, 42
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\ConditionsBlock.razor", "ASP.NET Razor", 29, 0, 0, 0, 0, 0, 0, 0, 4, 33
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DashboardSummary.razor", "ASP.NET Razor", 42, 0, 0, 0, 0, 0, 0, 0, 4, 46
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DashboardView.razor", "ASP.NET Razor", 43, 0, 0, 0, 0, 0, 0, 0, 10, 53
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DateQuestion.razor", "ASP.NET Razor", 89, 0, 0, 0, 0, 0, 0, 0, 12, 101
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DeadlineBadge.razor", "ASP.NET Razor", 37, 0, 0, 0, 0, 0, 0, 0, 5, 42
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DeadlinePreviewList.razor", "ASP.NET Razor", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\DocumentsBlock.razor", "ASP.NET Razor", 30, 0, 0, 0, 0, 0, 0, 0, 3, 33
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\LegalSourcesBlock.razor", "ASP.NET Razor", 38, 0, 0, 0, 0, 0, 0, 0, 4, 42
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\ProgressBar.razor", "ASP.NET Razor", 22, 0, 0, 0, 0, 0, 0, 0, 5, 27
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\QuestionIcons.cs", "C#", 0, 0, 0, 22, 0, 0, 0, 0, 4, 26
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\RightsPreviewList.razor", "ASP.NET Razor", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\StageSelector.razor", "ASP.NET Razor", 32, 0, 0, 0, 0, 0, 0, 0, 5, 37
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Components\StatusPill.razor", "ASP.NET Razor", 8, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\InMemoryUserProfileState.cs", "C#", 0, 0, 0, 27, 0, 0, 0, 0, 8, 35
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\AntroHeader.razor", "ASP.NET Razor", 21, 0, 0, 0, 0, 0, 0, 0, 3, 24
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\AntroShell.razor", "ASP.NET Razor", 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\MainLayout.razor", "ASP.NET Razor", 14, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\MainLayout.razor.css", "PostCSS", 0, 0, 0, 0, 0, 64, 0, 0, 14, 78
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\NavMenu.razor", "ASP.NET Razor", 35, 0, 0, 0, 0, 0, 0, 0, 5, 40
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\NavMenu.razor.css", "PostCSS", 0, 0, 0, 0, 0, 66, 0, 2, 16, 84
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Layout\QuestionnaireLayout.razor", "ASP.NET Razor", 4, 0, 0, 0, 0, 0, 0, 0, 2, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\BenefitDetail.razor", "ASP.NET Razor", 107, 0, 0, 0, 0, 0, 0, 0, 23, 130
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\Counter.razor", "ASP.NET Razor", 12, 0, 0, 0, 0, 0, 0, 0, 7, 19
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\Dashboard.razor", "ASP.NET Razor", 35, 0, 0, 0, 0, 0, 0, 0, 6, 41
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\DemoMaria.razor", "ASP.NET Razor", 22, 0, 0, 0, 0, 0, 0, 0, 6, 28
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\Home.razor", "ASP.NET Razor", 33, 0, 0, 0, 0, 0, 0, 0, 7, 40
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\NotFound.razor", "ASP.NET Razor", 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\Questionnaire.razor", "ASP.NET Razor", 221, 0, 0, 0, 0, 0, 0, 0, 27, 248
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\StageShowcase.razor", "ASP.NET Razor", 112, 0, 0, 0, 0, 0, 0, 0, 18, 130
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Pages\Weather.razor", "ASP.NET Razor", 47, 0, 0, 0, 0, 0, 0, 0, 11, 58
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Program.cs", "C#", 0, 0, 0, 15, 0, 0, 0, 0, 4, 19
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\Properties\launchSettings.json", "JSON", 0, 25, 0, 0, 0, 0, 0, 0, 1, 26
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\StageNavigation.cs", "C#", 0, 0, 0, 27, 0, 0, 0, 0, 6, 33
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\WebEvaluationContext.cs", "C#", 0, 0, 0, 12, 0, 0, 0, 0, 3, 15
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\_Imports.razor", "ASP.NET Razor", 15, 0, 0, 0, 0, 0, 0, 0, 1, 16
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\css\app.css", "PostCSS", 0, 0, 0, 0, 0, 1690, 0, 27, 283, 2000
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\index.html", "HTML", 0, 0, 0, 0, 0, 0, 31, 0, 5, 36
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css", "PostCSS", 0, 0, 0, 0, 0, 3886, 0, 6, 193, 4085
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css", "PostCSS", 0, 0, 0, 0, 0, 3886, 0, 6, 192, 4084
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css", "PostCSS", 0, 0, 0, 0, 0, 518, 0, 14, 65, 597
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css", "PostCSS", 0, 0, 0, 0, 0, 524, 0, 6, 64, 594
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css", "PostCSS", 0, 0, 0, 0, 0, 4891, 0, 8, 503, 5402
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css", "PostCSS", 0, 0, 0, 0, 0, 4887, 0, 6, 500, 5393
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css", "PostCSS", 0, 0, 0, 0, 0, 1, 0, 5, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap.css", "PostCSS", 0, 0, 0, 0, 0, 11136, 0, 24, 897, 12057
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css", "PostCSS", 0, 0, 0, 0, 0, 5, 0, 1, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css", "PostCSS", 0, 0, 0, 0, 0, 11138, 0, 6, 886, 12030
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css", "PostCSS", 0, 0, 0, 0, 0, 5, 0, 1, 0, 6
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js", "JavaScript", 0, 0, 0, 0, 5064, 0, 0, 655, 596, 6315
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js", "JavaScript", 0, 0, 0, 0, 1, 0, 0, 6, 0, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js", "JavaScript", 0, 0, 0, 0, 3568, 0, 0, 578, 302, 4448
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js", "JavaScript", 0, 0, 0, 0, 1, 0, 0, 6, 0, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.js", "JavaScript", 0, 0, 0, 0, 3604, 0, 0, 584, 307, 4495
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js", "JavaScript", 0, 0, 0, 0, 1, 0, 0, 6, 0, 7
+"c:\Users\Максим\Documents\Antro\src\Antro.Web\wwwroot\sample-data\weather.json", "JSON", 0, 27, 0, 0, 0, 0, 0, 0, 1, 28
+"Total", "-", 1384, 52, 43, 4675, 12239, 42702, 31, 1985, 5914, 69025

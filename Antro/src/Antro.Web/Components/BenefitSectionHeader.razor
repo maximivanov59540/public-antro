@@ -1,0 +1,18 @@
+<div class="benefit-section__header @SectionColorClass">
+    <h2 class="benefit-section__title">@Title</h2>
+    @if (!string.IsNullOrEmpty(SubtitleText))
+    {
+        <span class="benefit-section__subtitle">@SubtitleText</span>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string SubtitleText { get; set; } = string.Empty;
+
+    [Parameter]
+    public string SectionColorClass { get; set; } = string.Empty;
+}

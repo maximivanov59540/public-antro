@@ -1,0 +1,33 @@
+<section class="surface-card preview-block">
+    <div class="preview-block__header">
+        <p class="home-eyebrow">Права</p>
+        <h2>Ваши права сейчас</h2>
+    </div>
+
+    @if (Items.Count > 0)
+    {
+        <div class="preview-block__stack">
+            @foreach (var item in Items)
+            {
+                <a class="preview-row-link" href="@item.Href">
+                    <article class="preview-row">
+                        <div class="preview-row__copy">
+                            <h3>@item.Title</h3>
+                            <p>@item.Subtitle</p>
+                        </div>
+                        <StatusPill Model="item.Availability" />
+                    </article>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="preview-block__empty">Сейчас нет отдельного блока прав без дедлайна. Все доступные меры остаются ниже в общем списке.</p>
+    }
+</section>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<RightPreviewViewModel> Items { get; set; } = Array.Empty<RightPreviewViewModel>();
+}

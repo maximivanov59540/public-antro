@@ -1,0 +1,33 @@
+<section class="surface-card preview-block">
+    <div class="preview-block__header">
+        <p class="home-eyebrow">Сроки</p>
+        <h2>Не пропустите</h2>
+    </div>
+
+    @if (Items.Count > 0)
+    {
+        <div class="preview-block__stack">
+            @foreach (var item in Items)
+            {
+                <a class="preview-row-link" href="@item.Href">
+                    <article class="preview-row">
+                        <div class="preview-row__copy">
+                            <h3>@item.Title</h3>
+                            <StatusPill Model="item.Availability" />
+                        </div>
+                        <DeadlineBadge Model="item.Deadline" />
+                    </article>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="preview-block__empty">Сейчас нет срочных дедлайнов. Остальные сроки остаются внутри карточек льгот.</p>
+    }
+</section>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<DeadlinePreviewViewModel> Items { get; set; } = Array.Empty<DeadlinePreviewViewModel>();
+}

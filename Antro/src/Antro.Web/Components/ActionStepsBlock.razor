@@ -1,0 +1,33 @@
+@if (Steps.Count > 0)
+{
+    <section id="action-steps" class="detail-block surface-card">
+        <div class="detail-block__header">
+            <h3>Что делать</h3>
+        </div>
+
+        <ol class="action-steps">
+            @foreach (var step in Steps)
+            {
+                <li class="action-steps__item">
+                    <div class="action-steps__number">@step.Order</div>
+                    <div class="action-steps__copy">
+                        <h4>@step.Title</h4>
+                        @if (!string.IsNullOrWhiteSpace(step.Description))
+                        {
+                            <p>@step.Description</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(step.Notes))
+                        {
+                            <p class="detail-row__note">@step.Notes</p>
+                        }
+                    </div>
+                </li>
+            }
+        </ol>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<ActionStepViewModel> Steps { get; set; } = Array.Empty<ActionStepViewModel>();
+}

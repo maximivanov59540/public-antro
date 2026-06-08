@@ -1,0 +1,41 @@
+<div class="opts @(Layout == "grid" ? "opts--grid" : null)">
+    @foreach (var option in Options)
+    {
+        var isPicked = SelectedValue == option.Value;
+        <button type="button"
+                class="opt @(isPicked ? "opt--picked" : null)"
+                @onclick="@(() => SelectedValueChanged.InvokeAsync(option.Value))">
+            <span class="opt-ic">
+                @if (!string.IsNullOrWhiteSpace(option.Glyph))
+                {
+                    @option.Glyph
+                }
+                else
+                {
+                    @((MarkupString)QuestionIcons.Get(option.IconName))
+                }
+            </span>
+            <span class="opt-body">
+                <span class="opt-label">@option.Label</span>
+                @if (!string.IsNullOrWhiteSpace(option.Description))
+                {
+                    <span class="opt-note">@((MarkupString)option.Description)</span>
+                }
+            </span>
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Layout { get; set; } = "list";
+
+    [Parameter]
+    public IReadOnlyList<QuestionOption> Options { get; set; } = Array.Empty<QuestionOption>();
+
+    [Parameter]
+    public string? SelectedValue { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SelectedValueChanged { get; set; }
+}

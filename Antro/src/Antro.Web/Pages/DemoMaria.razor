@@ -1,0 +1,27 @@
+@page "/demo/maria"
+@inject IDashboardBuilder DashboardBuilder
+@inject IAntroClock Clock
+@inject InMemoryUserProfileState UserProfileState
+
+<DashboardView
+    Model="DashboardModel"
+    HeaderEyebrow="Демо"
+    HeaderSubtitle="Показываем тот же персональный дашборд, что и в обычном потоке, но на стабильном демонстрационном профиле."
+    ScenarioNote="Демо-сценарий: Мария, Москва, первый ребёнок, 14 дней." />
+
+@code {
+    private const string DemoDashboardRoute = "/demo/maria";
+
+    private DashboardViewModel? DashboardModel { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        var mariaProfile = DemoProfiles.MariaNewborn(Clock.Today);
+        UserProfileState.Set(mariaProfile, DemoDashboardRoute);
+
+        DashboardModel = DashboardBuilder.Build(
+            Moscow2026BenefitCatalog.Published,
+            mariaProfile,
+            WebEvaluationContext.CreateMoscow2026(Clock.Today));
+    }
+}

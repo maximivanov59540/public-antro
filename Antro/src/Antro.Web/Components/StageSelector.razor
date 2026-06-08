@@ -1,0 +1,66 @@
+@inject IStageShowcaseBuilder StageShowcaseBuilder
+@inject IAntroClock Clock
+
+<section class="stage-selector">
+    @if (!string.IsNullOrWhiteSpace(Heading))
+    {
+        <div class="stage-selector__intro">
+            <p class="home-eyebrow">Этапы</p>
+            <h2>@Heading</h2>
+            @if (!string.IsNullOrWhiteSpace(Description))
+            {
+                <p>@Description</p>
+            }
+        </div>
+    }
+
+    <div class="stage-selector__grid">
+        @foreach (var (item, index) in StageNavigation.All.Select((item, i) => (item, i)))
+        {
+            var isSelected = string.Equals(item.Slug, SelectedSlug, StringComparison.OrdinalIgnoreCase);
+            var num = (index + 1).ToString("D2");
+            <a class="stage-selector-card stage-selector-card--accent-@(index + 1) @(isSelected ? "stage-selector-card--selected" : null)"
+               href="/stage/@item.Slug">
+                <span class="stage-selector-card__num" aria-hidden="true">@num</span>
+                <span class="stage-selector-card__title">@item.Title</span>
+                <span class="stage-selector-card__subtitle">@item.Subtitle</span>
+                <span class="stage-selector-card__count">@GetBenefitCount(item.Stage) льгот и выплат</span>
+            </a>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public string? SelectedSlug { get; set; }
+
+    [Parameter]
+    public string? Heading { get; set; }
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    private IReadOnlyDictionary<LifeStage, int> _benefitCounts = new Dictionary<LifeStage, int>();
+
+    protected override void OnParametersSet()
+    {
+        // Считаем тот же показатель, что и заголовок страницы этапа (urgent + rights),
+        // по опубликованному каталогу — так бейдж всегда совпадает с числом на странице
+        // этапа и не расходится при изменениях каталога.
+        var context = WebEvaluationContext.CreateMoscow2026(Clock.Today);
+        _benefitCounts = StageNavigation.All.ToDictionary(
+            item => item.Stage,
+            item =>
+            {
+                var showcase = StageShowcaseBuilder.Build(
+                    item.Stage,
+                    Moscow2026BenefitCatalog.Published,
+                    context,
+                    profile: null);
+                return showcase.HeaderInfo.UrgentCount + showcase.HeaderInfo.RightsCount;
+            });
+    }
+
+    private int GetBenefitCount(LifeStage stage) =>
+        _benefitCounts.TryGetValue(stage, out var count) ? count : 0;
+}

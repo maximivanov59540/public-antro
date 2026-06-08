@@ -1,0 +1,41 @@
+@if (Sources.Count > 0)
+{
+    <section class="detail-block surface-card">
+        <div class="detail-block__header">
+            <h3>Источники</h3>
+        </div>
+
+        <div class="detail-block__stack">
+            @foreach (var source in Sources)
+            {
+                <article class="detail-row">
+                    <div class="detail-row__copy">
+                        <h4>@source.Title</h4>
+                        <p>@source.LevelLabel · @source.SourceIdentifier</p>
+                        @if (!string.IsNullOrWhiteSpace(source.ArticleOrClause))
+                        {
+                            <p>@source.ArticleOrClause</p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(source.Notes))
+                        {
+                            <p class="detail-row__note">@source.Notes</p>
+                        }
+                    </div>
+
+                    <div class="detail-row__meta">
+                        <span class="status-pill status-pill--informational">@source.VerificationLabel</span>
+                        @if (source.LastCheckedAt is not null)
+                        {
+                            <p class="detail-row__note">Проверено: @source.LastCheckedAt.Value.ToString("yyyy-MM-dd")</p>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<LegalSourceViewModel> Sources { get; set; } = Array.Empty<LegalSourceViewModel>();
+}
