@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -24,70 +24,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup .NET if full project exists
-        if: ${{ hashFiles('Antro.sln') != '' }}
+      - name: Show repository root
+        run: |
+          pwd
+          ls -la
+
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
-      - name: Prepare site files
-        shell: bash
+      - name: Restore
+        run: dotnet restore ./Antro.sln
+
+      - name: Publish Blazor WebAssembly
+        run: dotnet publish ./src/Antro.Web/Antro.Web.csproj -c Release -o ./publish-antro
+
+      - name: Prepare GitHub Pages output
         run: |
-          set -e
-
-          rm -rf site-output
-          mkdir -p site-output
-
-          if [ -f "Antro.sln" ]; then
-            echo "Detected full Antro project. Building Blazor WebAssembly..."
-            dotnet restore Antro.sln
-            dotnet publish src/Antro.Web/Antro.Web.csproj -c Release -o publish-antro
-            cp -a publish-antro/wwwroot/. site-output/
-
-          elif [ -f "index.html" ]; then
-            echo "Detected static site in repository root."
-            find . -mindepth 1 -maxdepth 1 \
-              ! -name ".git" \
-              ! -name ".github" \
-              ! -name "site-output" \
-              -exec cp -a {} site-output/ \;
-
-          elif [ -f "wwwroot/index.html" ]; then
-            echo "Detected static site inside wwwroot."
-            cp -a wwwroot/. site-output/
-
-          else
-            echo "ERROR: Could not find Antro.sln, index.html, or wwwroot/index.html."
-            echo "Repository root:"
-            ls -la
-            exit 1
-          fi
-
-          touch site-output/.nojekyll
-
-          if [ -f "site-output/index.html" ]; then
-            cp site-output/index.html site-output/404.html
-            sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' site-output/index.html
-            sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' site-output/404.html
-          else
-            echo "ERROR: site-output/index.html was not created."
-            ls -la site-output
-            exit 1
-          fi
-
-          echo "Prepared files:"
-          ls -la site-output
+          touch ./publish-antro/wwwroot/.nojekyll
+          cp ./publish-antro/wwwroot/index.html ./publish-antro/wwwroot/404.html
+          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' ./publish-antro/wwwroot/index.html
+          sed -i 's|<base href="/" />|<base href="/public-antro/" />|g' ./publish-antro/wwwroot/404.html
+          ls -la ./publish-antro/wwwroot
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload Pages artifact
+      - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site-output
+          path: ./publish-antro/wwwroot
 
       - name: Deploy to GitHub Pages
         id: deployment
